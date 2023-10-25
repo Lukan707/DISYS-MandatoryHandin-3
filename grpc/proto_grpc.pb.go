@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	RecieveMessage_RecieveAndBroadcastMessage_FullMethodName = "/ChitChatty.RecieveMessage/RecieveAndBroadcastMessage"
+	RecieveMessage_RecieveMessage_FullMethodName = "/ChitChatty.RecieveMessage/RecieveMessage"
 )
 
 // RecieveMessageClient is the client API for RecieveMessage service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RecieveMessageClient interface {
-	RecieveAndBroadcastMessage(ctx context.Context, in *ClientSendMessage, opts ...grpc.CallOption) (*ServerBroadcastMessage, error)
+	RecieveMessage(ctx context.Context, in *ClientSendMessage, opts ...grpc.CallOption) (*Undefined, error)
 }
 
 type recieveMessageClient struct {
@@ -37,9 +37,9 @@ func NewRecieveMessageClient(cc grpc.ClientConnInterface) RecieveMessageClient {
 	return &recieveMessageClient{cc}
 }
 
-func (c *recieveMessageClient) RecieveAndBroadcastMessage(ctx context.Context, in *ClientSendMessage, opts ...grpc.CallOption) (*ServerBroadcastMessage, error) {
-	out := new(ServerBroadcastMessage)
-	err := c.cc.Invoke(ctx, RecieveMessage_RecieveAndBroadcastMessage_FullMethodName, in, out, opts...)
+func (c *recieveMessageClient) RecieveMessage(ctx context.Context, in *ClientSendMessage, opts ...grpc.CallOption) (*Undefined, error) {
+	out := new(Undefined)
+	err := c.cc.Invoke(ctx, RecieveMessage_RecieveMessage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (c *recieveMessageClient) RecieveAndBroadcastMessage(ctx context.Context, i
 // All implementations must embed UnimplementedRecieveMessageServer
 // for forward compatibility
 type RecieveMessageServer interface {
-	RecieveAndBroadcastMessage(context.Context, *ClientSendMessage) (*ServerBroadcastMessage, error)
+	RecieveMessage(context.Context, *ClientSendMessage) (*Undefined, error)
 	mustEmbedUnimplementedRecieveMessageServer()
 }
 
@@ -58,8 +58,8 @@ type RecieveMessageServer interface {
 type UnimplementedRecieveMessageServer struct {
 }
 
-func (UnimplementedRecieveMessageServer) RecieveAndBroadcastMessage(context.Context, *ClientSendMessage) (*ServerBroadcastMessage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RecieveAndBroadcastMessage not implemented")
+func (UnimplementedRecieveMessageServer) RecieveMessage(context.Context, *ClientSendMessage) (*Undefined, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RecieveMessage not implemented")
 }
 func (UnimplementedRecieveMessageServer) mustEmbedUnimplementedRecieveMessageServer() {}
 
@@ -74,20 +74,20 @@ func RegisterRecieveMessageServer(s grpc.ServiceRegistrar, srv RecieveMessageSer
 	s.RegisterService(&RecieveMessage_ServiceDesc, srv)
 }
 
-func _RecieveMessage_RecieveAndBroadcastMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _RecieveMessage_RecieveMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ClientSendMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RecieveMessageServer).RecieveAndBroadcastMessage(ctx, in)
+		return srv.(RecieveMessageServer).RecieveMessage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: RecieveMessage_RecieveAndBroadcastMessage_FullMethodName,
+		FullMethod: RecieveMessage_RecieveMessage_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RecieveMessageServer).RecieveAndBroadcastMessage(ctx, req.(*ClientSendMessage))
+		return srv.(RecieveMessageServer).RecieveMessage(ctx, req.(*ClientSendMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -100,8 +100,98 @@ var RecieveMessage_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*RecieveMessageServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RecieveAndBroadcastMessage",
-			Handler:    _RecieveMessage_RecieveAndBroadcastMessage_Handler,
+			MethodName: "RecieveMessage",
+			Handler:    _RecieveMessage_RecieveMessage_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "grpc/proto.proto",
+}
+
+const (
+	BroadCastMessage_BroadCastMessage_FullMethodName = "/ChitChatty.BroadCastMessage/BroadCastMessage"
+)
+
+// BroadCastMessageClient is the client API for BroadCastMessage service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type BroadCastMessageClient interface {
+	BroadCastMessage(ctx context.Context, in *Undefined, opts ...grpc.CallOption) (*ServerBroadcastMessage, error)
+}
+
+type broadCastMessageClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewBroadCastMessageClient(cc grpc.ClientConnInterface) BroadCastMessageClient {
+	return &broadCastMessageClient{cc}
+}
+
+func (c *broadCastMessageClient) BroadCastMessage(ctx context.Context, in *Undefined, opts ...grpc.CallOption) (*ServerBroadcastMessage, error) {
+	out := new(ServerBroadcastMessage)
+	err := c.cc.Invoke(ctx, BroadCastMessage_BroadCastMessage_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// BroadCastMessageServer is the server API for BroadCastMessage service.
+// All implementations must embed UnimplementedBroadCastMessageServer
+// for forward compatibility
+type BroadCastMessageServer interface {
+	BroadCastMessage(context.Context, *Undefined) (*ServerBroadcastMessage, error)
+	mustEmbedUnimplementedBroadCastMessageServer()
+}
+
+// UnimplementedBroadCastMessageServer must be embedded to have forward compatible implementations.
+type UnimplementedBroadCastMessageServer struct {
+}
+
+func (UnimplementedBroadCastMessageServer) BroadCastMessage(context.Context, *Undefined) (*ServerBroadcastMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BroadCastMessage not implemented")
+}
+func (UnimplementedBroadCastMessageServer) mustEmbedUnimplementedBroadCastMessageServer() {}
+
+// UnsafeBroadCastMessageServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to BroadCastMessageServer will
+// result in compilation errors.
+type UnsafeBroadCastMessageServer interface {
+	mustEmbedUnimplementedBroadCastMessageServer()
+}
+
+func RegisterBroadCastMessageServer(s grpc.ServiceRegistrar, srv BroadCastMessageServer) {
+	s.RegisterService(&BroadCastMessage_ServiceDesc, srv)
+}
+
+func _BroadCastMessage_BroadCastMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Undefined)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BroadCastMessageServer).BroadCastMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BroadCastMessage_BroadCastMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BroadCastMessageServer).BroadCastMessage(ctx, req.(*Undefined))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// BroadCastMessage_ServiceDesc is the grpc.ServiceDesc for BroadCastMessage service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var BroadCastMessage_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "ChitChatty.BroadCastMessage",
+	HandlerType: (*BroadCastMessageServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "BroadCastMessage",
+			Handler:    _BroadCastMessage_BroadCastMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

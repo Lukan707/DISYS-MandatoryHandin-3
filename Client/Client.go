@@ -33,14 +33,14 @@ func main() {
 	}
 
 	// Wait for the client (user) to ask for the time
-	go waitForTimeRequest(client)
+	go waitforServerBroadcast(client)
 
 	for {
 
 	}
 }
 
-func waitForTimeRequest(client *Client) {
+func waitforServerBroadcast(client *Client) {
 	// Connect to the server
 	serverConnection, _ := connectToServer()
 
@@ -51,16 +51,17 @@ func waitForTimeRequest(client *Client) {
 		log.Printf("Client asked for time with input: %s\n", input)
 
 		// Ask the server for the time
-		timeReturnMessage, err := serverConnection.RecieveAndBroadcastMessage(context.Background(), &proto.ClientSendMessage{
-			//ClientId: int64(client.id),
+		_, _ = serverConnection.RecieveMessage(context.Background(), &proto.ClientSendMessage{
+			ClientId: int64(client.id),
+			Msg: input,
 		})
 
-		if err != nil {
-			log.Printf(err.Error())
-		} else {
-			log.Printf("Server %s says the time is %s\n", timeReturnMessage.Msg, timeReturnMessage.Time)
-		}
+		
 	}
+}
+
+func recieveBrodcast(serverMsg string){
+
 }
 
 func connectToServer() (proto.RecieveMessageClient, error) {
