@@ -67,3 +67,11 @@ func (c *Server) AskForTime(ctx context.Context, in *proto.AskForTimeMessage) (*
 		ServerName: c.name,
 	}, nil
 }
+
+func (c *Server) serverBroadcastMessage(ctx context.Context, in *proto.serverBroadcastMessage) (*proto.clientSendMessage, error) {
+	log.Printf("Client with ID %d asked for the time\n", in.ClientId)
+	return &proto.clientSendMessage{
+		Time:       time.Now().String(),
+		ServerName: c.name,
+	}, nil
+}

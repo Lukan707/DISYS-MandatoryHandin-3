@@ -19,89 +19,89 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	TimeAsk_AskForTime_FullMethodName = "/ChitChatty.TimeAsk/AskForTime"
+	RecieveMessage_RecieveAndBroadcastMessage_FullMethodName = "/ChitChatty.RecieveMessage/RecieveAndBroadcastMessage"
 )
 
-// TimeAskClient is the client API for TimeAsk service.
+// RecieveMessageClient is the client API for RecieveMessage service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type TimeAskClient interface {
-	AskForTime(ctx context.Context, in *AskForTimeMessage, opts ...grpc.CallOption) (*TimeMessage, error)
+type RecieveMessageClient interface {
+	RecieveAndBroadcastMessage(ctx context.Context, in *ClientSendMessage, opts ...grpc.CallOption) (*ServerBroadcastMessage, error)
 }
 
-type timeAskClient struct {
+type recieveMessageClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewTimeAskClient(cc grpc.ClientConnInterface) TimeAskClient {
-	return &timeAskClient{cc}
+func NewRecieveMessageClient(cc grpc.ClientConnInterface) RecieveMessageClient {
+	return &recieveMessageClient{cc}
 }
 
-func (c *timeAskClient) AskForTime(ctx context.Context, in *AskForTimeMessage, opts ...grpc.CallOption) (*TimeMessage, error) {
-	out := new(TimeMessage)
-	err := c.cc.Invoke(ctx, TimeAsk_AskForTime_FullMethodName, in, out, opts...)
+func (c *recieveMessageClient) RecieveAndBroadcastMessage(ctx context.Context, in *ClientSendMessage, opts ...grpc.CallOption) (*ServerBroadcastMessage, error) {
+	out := new(ServerBroadcastMessage)
+	err := c.cc.Invoke(ctx, RecieveMessage_RecieveAndBroadcastMessage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// TimeAskServer is the server API for TimeAsk service.
-// All implementations must embed UnimplementedTimeAskServer
+// RecieveMessageServer is the server API for RecieveMessage service.
+// All implementations must embed UnimplementedRecieveMessageServer
 // for forward compatibility
-type TimeAskServer interface {
-	AskForTime(context.Context, *AskForTimeMessage) (*TimeMessage, error)
-	mustEmbedUnimplementedTimeAskServer()
+type RecieveMessageServer interface {
+	RecieveAndBroadcastMessage(context.Context, *ClientSendMessage) (*ServerBroadcastMessage, error)
+	mustEmbedUnimplementedRecieveMessageServer()
 }
 
-// UnimplementedTimeAskServer must be embedded to have forward compatible implementations.
-type UnimplementedTimeAskServer struct {
+// UnimplementedRecieveMessageServer must be embedded to have forward compatible implementations.
+type UnimplementedRecieveMessageServer struct {
 }
 
-func (UnimplementedTimeAskServer) AskForTime(context.Context, *AskForTimeMessage) (*TimeMessage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AskForTime not implemented")
+func (UnimplementedRecieveMessageServer) RecieveAndBroadcastMessage(context.Context, *ClientSendMessage) (*ServerBroadcastMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RecieveAndBroadcastMessage not implemented")
 }
-func (UnimplementedTimeAskServer) mustEmbedUnimplementedTimeAskServer() {}
+func (UnimplementedRecieveMessageServer) mustEmbedUnimplementedRecieveMessageServer() {}
 
-// UnsafeTimeAskServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to TimeAskServer will
+// UnsafeRecieveMessageServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to RecieveMessageServer will
 // result in compilation errors.
-type UnsafeTimeAskServer interface {
-	mustEmbedUnimplementedTimeAskServer()
+type UnsafeRecieveMessageServer interface {
+	mustEmbedUnimplementedRecieveMessageServer()
 }
 
-func RegisterTimeAskServer(s grpc.ServiceRegistrar, srv TimeAskServer) {
-	s.RegisterService(&TimeAsk_ServiceDesc, srv)
+func RegisterRecieveMessageServer(s grpc.ServiceRegistrar, srv RecieveMessageServer) {
+	s.RegisterService(&RecieveMessage_ServiceDesc, srv)
 }
 
-func _TimeAsk_AskForTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AskForTimeMessage)
+func _RecieveMessage_RecieveAndBroadcastMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ClientSendMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TimeAskServer).AskForTime(ctx, in)
+		return srv.(RecieveMessageServer).RecieveAndBroadcastMessage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TimeAsk_AskForTime_FullMethodName,
+		FullMethod: RecieveMessage_RecieveAndBroadcastMessage_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TimeAskServer).AskForTime(ctx, req.(*AskForTimeMessage))
+		return srv.(RecieveMessageServer).RecieveAndBroadcastMessage(ctx, req.(*ClientSendMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// TimeAsk_ServiceDesc is the grpc.ServiceDesc for TimeAsk service.
+// RecieveMessage_ServiceDesc is the grpc.ServiceDesc for RecieveMessage service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var TimeAsk_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "ChitChatty.TimeAsk",
-	HandlerType: (*TimeAskServer)(nil),
+var RecieveMessage_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "ChitChatty.RecieveMessage",
+	HandlerType: (*RecieveMessageServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AskForTime",
-			Handler:    _TimeAsk_AskForTime_Handler,
+			MethodName: "RecieveAndBroadcastMessage",
+			Handler:    _RecieveMessage_RecieveAndBroadcastMessage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
