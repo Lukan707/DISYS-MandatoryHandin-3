@@ -13,9 +13,9 @@ import (
 
 
 type Server struct {
-	proto.UnimplementedTimeAskServer // Necessary
-	name                             string
-	port                             int
+	proto.UnimplementedRecieveMessageServer // Necessary
+	name string
+	port int
 }
 
 var port = flag.Int("port", 0, "server port number")
@@ -53,25 +53,16 @@ func startServer(server *Server) {
 	log.Printf("Started server at port: %d\n", server.port)
 
 	// Register the grpc server and serve its listener
-	proto.RegisterTimeAskServer(grpcServer, server)
+	proto.RegisterRecieveMessageServer(grpcServer, server)
 	serveError := grpcServer.Serve(listener)
 	if serveError != nil {
 		log.Fatalf("Could not serve listener")
 	}
 }
 
-func (c *Server) AskForTime(ctx context.Context, in *proto.AskForTimeMessage) (*proto.TimeMessage, error) {
-	log.Printf("Client with ID %d asked for the time\n", in.ClientId)
-	return &proto.TimeMessage{
-		Time:       time.Now().String(),
-		ServerName: c.name,
-	}, nil
-}
-
-func (c *Server) serverBroadcastMessage(ctx context.Context, in *proto.serverBroadcastMessage) (*proto.clientSendMessage, error) {
-	log.Printf("Client with ID %d asked for the time\n", in.ClientId)
-	return &proto.clientSendMessage{
-		Time:       time.Now().String(),
-		ServerName: c.name,
+func (c *Server) RecieveAndBroadcastMessage(ctx context.Context, in *proto.ClientSendMessage) (*proto.ServerBroadcastMessage, error) {
+	return &proto.ServerBroadcastMessage{
+		Time: time.Now().String(),
+		Msg: c.name,
 	}, nil
 }

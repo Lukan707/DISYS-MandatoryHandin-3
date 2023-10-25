@@ -4,16 +4,16 @@ package ChitChatty;
 
 option go_package = "grpc/proto";
 
-message clientSendMessage {
-  string msg = 1;
-  string time = 2;
+message ClientSendMessage {
+  string Msg = 1;
+  string Time = 2;
 }
 
-message serverBroadcastMessage {
-  string msg = 1;
-  string time = 2;
+message ServerBroadcastMessage {
+  string Msg = 1;
+  string Time = 2;
 }
 
 service RecieveMessage {
-  rpc RecieveAndBroadcastMessage(clientSendMessage) returns (serverBroadcastMessage);
+  rpc RecieveAndBroadcastMessage(ClientSendMessage) returns (ServerBroadcastMessage);
 }

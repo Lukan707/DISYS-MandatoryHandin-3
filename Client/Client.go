@@ -28,6 +28,7 @@ func main() {
 	// Create a client
 	client := &Client{
 		id:         1,
+		
 		portNumber: *clientPort,
 	}
 
@@ -50,19 +51,19 @@ func waitForTimeRequest(client *Client) {
 		log.Printf("Client asked for time with input: %s\n", input)
 
 		// Ask the server for the time
-		timeReturnMessage, err := serverConnection.AskForTime(context.Background(), &proto.AskForTimeMessage{
-			ClientId: int64(client.id),
+		timeReturnMessage, err := serverConnection.RecieveAndBroadcastMessage(context.Background(), &proto.ClientSendMessage{
+			//ClientId: int64(client.id),
 		})
 
 		if err != nil {
 			log.Printf(err.Error())
 		} else {
-			log.Printf("Server %s says the time is %s\n", timeReturnMessage.ServerName, timeReturnMessage.Time)
+			log.Printf("Server %s says the time is %s\n", timeReturnMessage.Msg, timeReturnMessage.Time)
 		}
 	}
 }
 
-func connectToServer() (proto.TimeAskClient, error) {
+func connectToServer() (proto.RecieveMessageClient, error) {
 	// Dial the server at the specified port.
 	conn, err := grpc.Dial("localhost:"+strconv.Itoa(*serverPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
@@ -70,5 +71,5 @@ func connectToServer() (proto.TimeAskClient, error) {
 	} else {
 		log.Printf("Connected to the server at port %d\n", *serverPort)
 	}
-	return proto.NewTimeAskClient(conn), nil
+	return proto.NewRecieveMessageClient(conn), nil
 }
